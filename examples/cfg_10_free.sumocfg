@@ -1,0 +1,20 @@
+<configuration>
+
+    <input>
+        <net-file value="net_10.net.xml"/>
+		<additional-files value="input_additional.add.xml, route_free.rou.xml"/>
+    </input>
+
+	<report>
+		<duration-log.statistics value="true"/>	
+		<log value="performance.out.xml"/>
+		<full-output value="dump_10_free.xml" />
+	</report>	
+
+	<time>
+        <begin value="0"/>
+        <end value="300"/>
+		<step-length value="0.25"/>    
+	</time>
+	
+</configuration>

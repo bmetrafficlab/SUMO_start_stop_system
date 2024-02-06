@@ -1,0 +1,8 @@
+<additional>
+
+<edgeData id="1" type="emissions" freq="1800" file="emissions.xml" excludeEmpty="true" end="1800" withInternal="true"/>
+
+<vType id="intelligent_driver" carFollowModel="EIDM" laneChangeModel="LC2013" minGap="1.5" emissionClass="HBEFA4/PC_petrol_Euro-4"/>
+<vType id="start-stop-vehicle" carFollowModel="EIDM" laneChangeModel="LC2013" minGap="1.5" emissionClass="HBEFA4/PC_petrol_Euro-4"/>
+
+</additional>
