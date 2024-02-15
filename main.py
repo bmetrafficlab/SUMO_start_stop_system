@@ -8,6 +8,7 @@ import startstop as Stp
  - start_stop_ratio: Ratio of the start-stop vehicles in the simulation given in %.
  - ratio_based_simulation: If True, the vehicles are assigned to the start-stop vehicles group by the given ratio,
   otherwise, the vehicle class type "start-stop-vehicle" is used.
+ - idle_time_in_sec: The amount of time the idle values are considered in seconds
  - idle_values: Dictionary of the idle emission values (CO2, CO, HC, NOx, PMx) based on the 
   HBEFA4/PC_petrol_Euro-4 model. Selected default parameters can be overwritten.
 """
@@ -15,6 +16,7 @@ import startstop as Stp
 sumocfg = "examples/cfg_10_free.sumocfg"
 ratio_based_simulation = True
 start_stop_ratio = 80
+idle_time_in_sec = 7
 idle_values = None
 # Example parameter selection:
 #idle_values = {'CO2': 1.8, 'CO': 3.0126e-12}
@@ -38,7 +40,8 @@ def main():
 
             # Start the simulation
             print("Starting SUMO simulation...")
-            Stp.run_simulation(sumocfg, duration, stepsize, start_stop_ratio, ratio_based_simulation, idle_values)
+            Stp.run_simulation(sumocfg, duration, stepsize, start_stop_ratio, ratio_based_simulation, idle_time_in_sec,
+                               idle_values)
             return
         else:
             print("The given SUMO configuration file does not exist!")

@@ -4,7 +4,8 @@ import traci
 import matplotlib.pyplot as plt
 
 
-def run_simulation(sumocfg, duration, steptime, start_stop_ratio, ratio_based_simulation, idle_values=None):
+def run_simulation(sumocfg, duration, steptime, start_stop_ratio, ratio_based_simulation, idle_time_in_sec,
+                   idle_values=None):
     """
      A function to start the SUMO simulation with the given SUMO configuration using the extracted SUMO settings.
      SUMO is set to dump the emission data at the end of the simulation. The emission dump is then copied and
@@ -52,11 +53,11 @@ def run_simulation(sumocfg, duration, steptime, start_stop_ratio, ratio_based_si
     idle_pmx = idle_values['PMx']
 
     # Idle emission for 7 seconds
-    idle_co2_7s = idle_co2 * 7
-    idle_co_7s = idle_co * 7
-    idle_hc_7s = idle_hc * 7
-    idle_nox_7s = idle_nox * 7
-    idle_pmx_7s = idle_pmx * 7
+    idle_co2_7s = idle_co2 * idle_time_in_sec
+    idle_co_7s = idle_co * idle_time_in_sec
+    idle_hc_7s = idle_hc * idle_time_in_sec
+    idle_nox_7s = idle_nox * idle_time_in_sec
+    idle_pmx_7s = idle_pmx * idle_time_in_sec
 
     # Data storages
     start_stop_data = {}
@@ -309,7 +310,7 @@ def calculate_cumulative_emissions():
 
     # Print the sum of each emission type
     print("------------------------------")
-    print("Cumualted emissions for non start-stop case:")
+    print("Cumulated emissions for non start-stop case:")
     print("Sum of CO2:", sum_CO2, "mg")
     print("Sum of CO:", sum_CO, "mg")
     print("Sum of HC:", sum_HC, "mg")
@@ -340,7 +341,7 @@ def calculate_cumulative_emissions():
 
     # Print the sum of each emission type
     print("------------------------------")
-    print("Cumualted emissions for start-stop case:")
+    print("Cumulated emissions for start-stop case:")
     print("Sum of CO2:", sum_CO2_start_stop, "mg")
     print("Sum of CO:", sum_CO_start_stop, "mg")
     print("Sum of HC:", sum_HC_start_stop, "mg")
