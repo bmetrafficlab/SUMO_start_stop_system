@@ -104,23 +104,45 @@ def run_simulation(sumocfg, duration, steptime, start_stop_ratio, ratio_based_si
                 if current_speed == 0:
                     if vehicle_id not in start_stop_data:
                         start_stop_data[vehicle_id] = {'time': simulation_time, 'speed': current_speed,
-                                                       'co2': current_co2}
+                                                       'co2': current_co2, 'co': current_co, 'hc': current_hc,
+                                                       'nox': current_nox, 'pmx': current_pmx}
                     else:
                         start_stop_data[vehicle_id]['time'] += steptime
 
+                    # If the vehicle is not present in the emission data yet, it means it just stopped.
+                    # It must be added with idle emissions.
                     if vehicle_id not in vehicle_emission_data_per_step:
                         vehicle_emission_data_per_step[vehicle_id] = {}
                         vehicle_emission_data_per_step[vehicle_id][simulation_time] = {'CO2': current_co2,
                                                                                        'CO': current_co,
                                                                                        'HC': current_hc,
                                                                                        'NOx': current_nox,
-                                                                                       'PMx': current_pmx}
+                                                                                       'PMx': current_pmx,
+                                                                                       }
                     else:
-                        vehicle_emission_data_per_step[vehicle_id][simulation_time] = {'CO2': current_co2,
-                                                                                       'CO': current_co,
-                                                                                       'HC': current_hc,
-                                                                                       'NOx': current_nox,
-                                                                                       'PMx': current_pmx}
+                        # The vehicle was already in the emission data,
+                        # meaning it is either still stopped or stopped again
+
+                        # We check if the vehicle is stopped for more than 2 seconds
+                        # If it is stopped for more than 2 seconds, the start-stop system stopped the engine
+                        # we have to assign zero emissions until engine start
+                        if start_stop_data[vehicle_id]['time'] > 2:
+                            # Assuming engine is stopped, zero emission
+                            vehicle_emission_data_per_step[vehicle_id][simulation_time] = {'CO2': 0.0,
+                                                                                           'CO': 0.0,
+                                                                                           'HC': 0.0,
+                                                                                           'NOx': 0.0,
+                                                                                           'PMx': 0.0
+                                                                                           }
+                        else:
+                            # Engine still running in idle, enough to read current emission data and store them
+                            vehicle_emission_data_per_step[vehicle_id][simulation_time] = {'CO2': current_co2,
+                                                                                           'CO': current_co,
+                                                                                           'HC': current_hc,
+                                                                                           'NOx': current_nox,
+                                                                                           'PMx': current_pmx,
+                                                                                           }
+
                 else:
                     # Vehicle is moving
                     if vehicle_id in start_stop_data:
@@ -150,7 +172,9 @@ def run_simulation(sumocfg, duration, steptime, start_stop_ratio, ratio_based_si
                         start_stop_data[vehicle_id]['speed'] = current_speed
             else:
                 # Regular vehicle data collection
-                regular_data[vehicle_id] = {'time': simulation_time, 'speed': current_speed, 'co2': current_co2}
+                regular_data[vehicle_id] = {'time': simulation_time, 'speed': current_speed, 'co2': current_co2,
+                                            'co': current_co, 'hc': current_hc,
+                                            'nox': current_nox, 'pmx': current_pmx}
 
             simulation_time = i * steptime
 
